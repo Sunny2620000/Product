@@ -1,0 +1,13 @@
+/* Center the spinner */
+.spinner-border {
+    display: block;
+    margin: 0 auto;
+}
+
+/* Modal backdrop styling */
+.modal.show {
+    background: rgba(0, 0, 0, 0.5);
+}
+/* .button{
+    
+} */
