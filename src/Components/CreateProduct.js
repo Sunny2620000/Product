@@ -1,11 +1,13 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AxiosInstance from '../Services/AxoisInstance'
 
 export default function CreateProduct(){
     const [title,setTitle] = useState('')
     const [body,setBody] = useState('')
     const [data,setData] = useState([])
+    const navigator = useNavigate() 
 
     const handleSubmit = (event) =>{
         event.preventDefault()
@@ -31,14 +33,20 @@ export default function CreateProduct(){
             console.log('error')
         })
     }
+    const handleProductList=()=>{
+        navigator('/')
+    }
     return(
             <div className="modal show d-block" tabIndex="-1" role="dialog">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Add New Product</h5>
-                            <button type="button" className="close" >
+                            {/* <button type="button" className="close" >
                                 <span>&times;</span>
+                            </button> */}
+                            <button type="button" onClick={handleProductList} className="btn btn-secondary" >
+                                Back
                             </button>
                         </div>
                         <div className="modal-body">

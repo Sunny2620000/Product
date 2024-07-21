@@ -8,6 +8,9 @@
 .modal.show {
     background: rgba(0, 0, 0, 0.5);
 }
-/* .button{
+.notfound{
+    text-align: center;
+    background-color: brown;
     
-} */
+
+}
