@@ -13,9 +13,9 @@ export default function ListProduct() {
     useEffect(() => {
         const result = async () => {
             try {
-                const res = await axios.get('posts');
-                // console.log("response", res);
-                const product = res && res.data ? res.data : [];
+                const res = await axios.get('products');
+                //  console.log("response", res.data);
+                const product = res && res.data && res.data.data ? res.data.data : [];
                 setdata(product);
                 setLoading(false);
             } catch (error) {
@@ -26,7 +26,6 @@ export default function ListProduct() {
         result();
     }, []);
     const handleAddClick = ()=>{
-      alert('dfsf')
       navigate('/add-product')
     }
     const tenProduct = post.slice(0, 10);
@@ -44,18 +43,18 @@ export default function ListProduct() {
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Body</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">Product Title</th>
+                                <th scope="col">Product Description</th>
+                                <th scope="col">Product Price</th>
                             </tr>
                         </thead>
                         <tbody>
                             {tenProduct.map((p, i) => (
                                 <tr key={i}>
                                     <th scope="row">{i + 1}</th>
-                                    <td>{p.title}</td>
-                                    <td>{p.body}</td>
-                                    <td>@handle</td>
+                                    <td>{p.product_title ? p.product_title : '' }</td>
+                                    <td>{p.product_description ? p.product_description : ''}</td>
+                                    <td>${p.product_price ? p.product_price :''}</td>
                                 </tr>
                             ))}
                         </tbody>
