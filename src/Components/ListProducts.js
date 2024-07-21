@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "../Services/AxoisInstance";
 export default function ListProduct() {
+    const [post,setdata] = useState([])
+
+    useEffect(()=>{
+        const result = async ()=>{
+            try{
+                const res = await axios.get('posts').then((response)=>{
+                    console.log("response",response)
+                    const product = response && response.data ? response.data : []
+                    setdata(product)
+                }).catch((error)=>{console.log("error",error)})
+            }catch{
+                console.log("error")
+            }
+        }
+        result()
+    },[])
+    const tenProduct = post.slice(0,10);
   return (
-    <table class="table table-success table-striped">
+    <table className="table table-success table-striped">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -11,23 +29,16 @@ export default function ListProduct() {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td colspan="2">Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
+       { tenProduct.map((p,i)=>{
+            return(
+                <tr key={i}>
+                <th scope="row">{i+1}</th>
+                <td>{p.title}</td>
+                <td>{p.body}</td>
+                <td>test</td>
+              </tr>
+            )
+       })}
       </tbody>
     </table>
   );
