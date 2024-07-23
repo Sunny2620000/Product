@@ -1,36 +1,44 @@
-import axios from 'axios'
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,useParams } from 'react-router-dom'
 import AxiosInstance from '../Services/AxoisInstance'
+import { toast } from 'react-toastify';
 
 export default function CreateProduct(){
     const [title,setTitle] = useState('')
-    const [body,setBody] = useState('')
+    const [product_description,setproduct_description] = useState('')
+    const [price,setPrice] = useState('')
     const [data,setData] = useState([])
-    const navigator = useNavigate() 
-
+    const navigator = useNavigate()
     const handleSubmit = (event) =>{
         event.preventDefault()
-        const newTitle = event.target.title.value
-        const newBody = event.target.body.value
-        setTitle(newTitle)
-        setBody(newBody)
         addProduct(event);
-        // const newData =[{title:newTitle,body:newBody}]
-        // setData(newData)
     }
+
+    const handlePrice = (event)=>{
+        setPrice(event.target.value)
+    }
+    const handleTitle = (event)=>{
+        setTitle(event.target.value)
+    }
+    const handleproduct_description = (event)=>{
+        setproduct_description(event.target.value)
+    }
+    
     const addProduct = (event)=>{
-        AxiosInstance.post('posts',{
-            title:title,
-            body:body
+        AxiosInstance.post('add-product',{
+            product_title:title,
+            product_description:product_description,
+            product_price:price
         }).then((response)=>{
-            console.log(response)
             event.target.reset()
             setTitle('');
-            setBody('');
-            setData([...data, { title: title, body: body }]);
+            setproduct_description('');
+            setPrice('')
+            toast.success(response.data.data.message)
+            //setData([...data, { title: title, product_description: product_description }]);
+            console.log(response)
         }).catch((error)=>{
-            console.log('error')
+            console.log('error',error)
         })
     }
     const handleProductList=()=>{
@@ -49,16 +57,20 @@ export default function CreateProduct(){
                                 Back
                             </button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-product_description">
                             {/* Add form elements here */}
                             <form onSubmit={handleSubmit}>
                                 <div className="form-group">
                                     <label>Title</label>
-                                    <input type="text" className="form-control" placeholder="Enter title" name="title" />
+                                    <input type="text" className="form-control" placeholder="Enter title" name="title" onChange={handleTitle} />
                                 </div>
                                 <div className="form-group">
-                                    <label>Body</label>
-                                    <textarea className="form-control" rows="3" placeholder="Enter body" name="body"></textarea>
+                                    <label>Title</label>
+                                    <input type="text" className="form-control" placeholder="Enter title" name="price" onChange={handlePrice} />
+                                </div>
+                                <div className="form-group">
+                                    <label>product_description</label>
+                                    <textarea className="form-control" rows="3" placeholder="Enter product_description" name="product_description"onChange={handleproduct_description}></textarea>
                                 </div>
                                 <div className="modal-footer">
                             {/* <button type="button" className="btn btn-secondary" >Close</button> */}
