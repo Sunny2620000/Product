@@ -1,16 +1,48 @@
-/* Center the spinner */
-.spinner-border {
-    display: block;
-    margin: 0 auto;
+.container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Modal backdrop styling */
-.modal.show {
-    background: rgba(0, 0, 0, 0.5);
+h1 {
+    font-size: 2rem;
+    color: #333;
 }
-.notfound{
-    text-align: center;
-    background-color: brown;
-    
 
+.table {
+    background-color: #fff;
+}
+
+thead.thead-dark th {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.btn {
+    /* display: flex; */
+    align-items: center;
+}
+
+.btn svg {
+    margin-right: 5px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #000;
 }

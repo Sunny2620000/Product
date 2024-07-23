@@ -1,0 +1,33 @@
+/* Center the content vertically and horizontally */
+.notfound-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #f8d7da; /* Light red background color for a soft warning color */
+    color: #721c24; /* Dark red color for the text */
+    text-align: center;
+  }
+  
+  .notfound-title {
+    font-size: 6rem; /* Large font size for the error code */
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  .notfound-message {
+    font-size: 1.5rem; /* Medium font size for the message */
+    margin-top: 0.5rem;
+  }
+  
+  @media (max-width: 600px) {
+    .notfound-title {
+      font-size: 4rem; /* Slightly smaller font size on smaller screens */
+    }
+  
+    .notfound-message {
+      font-size: 1.2rem; /* Slightly smaller font size on smaller screens */
+    }
+  }
+  

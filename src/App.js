@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import ListProduct from './Components/ListProducts';
+import ListProduct from './Components/ListProduct';
 import CreateProduct from './Components/CreateProduct';
 import NotFound from './Components/NotFound';
 import { ToastContainer, toast } from 'react-toastify';

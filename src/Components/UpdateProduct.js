@@ -1,95 +1,117 @@
-import React, { useEffect, useState } from 'react'
-import { useParams,useNavigate } from 'react-router-dom'
-import AxiosInstance from '../Services/AxoisInstance'
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import AxiosInstance from '../Services/AxoisInstance';
 import { toast } from 'react-toastify';
-export default function UpdateProduct(){
-    const[title,setTitle] = useState('')
-    const[product_description,setproduct_description] = useState('')
-    const[price,setPrice] = useState('')
-    const params = useParams();
-    const productId = params.id ? params.id : 0
-    const back = useNavigate()
-    const handlePrice = (event)=>{
-        setPrice(event.target.value)
-    }
-    const handleTitle = (event)=>{
-        setTitle(event.target.value)
-    }
-    const handleproduct_description = (event)=>{
-        setproduct_description(event.target.value)
-    }
+import 'react-toastify/dist/ReactToastify.css';
 
-    const handleBack = ()=>{
-        back('/')
-    }
-    const updateHandler = (event)=>{
-        event.preventDefault()
-         AxiosInstance.put(`update-product/${productId}`,{
-                product_title:title,
-                product_description:product_description,
-                product_price:price
-         }).then((response)=>{
-            console.log("response",response)
-            toast.success('Updated successfully!');
-         }).catch((response)=>{
-            console.log("Res",response)
-            toast.error("something went wrong")
-         })
-    }
-    useEffect(()=>{
-        const result = async()=>{
-            try{
-                const response = await AxiosInstance.get(`edit-product/${productId}`)
-                // console.log(response.data.data)
-                const productdata = response && response.data && response.data.data ? response.data.data : []
-                const productTitle = productdata.product_title ? productdata.product_title : ''
-                const productDescription = productdata.product_description ? productdata.product_description : ''
-                const productPrice = productdata.product_price ? productdata.product_price :'' 
-                    setTitle(productTitle)
-                    setproduct_description(productDescription)
-                     setPrice(productPrice)
-            }catch{
-                console.log("error")
-            }
+export default function UpdateProduct() {
+    const [title, setTitle] = useState('');
+    const [product_description, setProductDescription] = useState('');
+    const [price, setPrice] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const { id } = useParams();
+    const navigate = useNavigate();
+
+    const handlePrice = (event) => setPrice(event.target.value);
+    const handleTitle = (event) => setTitle(event.target.value);
+    const handleProductDescription = (event) => setProductDescription(event.target.value);
+
+    const handleBack = () => navigate('/');
+
+    const updateHandler = async (event) => {
+        event.preventDefault();
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await AxiosInstance.put(`update-product/${id}`, {
+                product_title: title,
+                product_description: product_description,
+                product_price: price
+            });
+            toast.success('Product updated successfully!');
+            navigate('/');
+        } catch (error) {
+            setError('Failed to update product. Please try again.');
+            toast.error('Something went wrong.');
+        } finally {
+            setLoading(false);
         }
-        result()
-    },[productId])
-    return(
+    };
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await AxiosInstance.get(`edit-product/${id}`);
+                const productData = response.data.data || {};
+                setTitle(productData.product_title || '');
+                setProductDescription(productData.product_description || '');
+                setPrice(productData.product_price || '');
+            } catch (error) {
+                setError('Failed to fetch product data.');
+                toast.error('Failed to fetch product data.');
+            }
+        };
+        fetchProduct();
+    }, [id]);
+
+    return (
         <div className="modal show d-block" tabIndex="-1" role="dialog">
-        <div className="modal-dialog" role="document">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h5 className="modal-title">Update New Product</h5>
-                    {/* <button type="button" className="close" >
-                        <span>&times;</span>
-                    </button> */}
-                    <button type="button" onClick={handleBack}className="btn btn-secondary" >
-                        Back
-                    </button>
-                </div>
-                <div className="modal-product_description">
-                    {/* Add form elements here */}
-                    <form onSubmit={updateHandler}>
-                        <div className="form-group">
-                            <label>Product Title</label>
-                            <input type="text" className="form-control" placeholder="Enter title" name="title"onChange={handleTitle} value={title ? title :''}/>
-                        </div>
-                        <div className="form-group">
-                            <label>Product Price</label>
-                            <input type="text" className="form-control" placeholder="Enter title" name="price"onChange={handlePrice} value={price ? price :''}/>
-                        </div>
-                        <div className="form-group">
-                            <label>Product Description</label>
-                            <textarea className="form-control" rows="3" placeholder="Enter product_description" name="product_description" onChange={handleproduct_description}value={product_description ? product_description :''}></textarea>
-                        </div>
-                        <div className="modal-footer">
-                    {/* <button type="button" className="btn btn-secondary" >Close</button> */}
-                    <button type="submit" className="btn btn-primary">Update</button>
-                </div>
-                    </form>
+            <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h5 className="modal-title">Update Product</h5>
+                        <button type="button" className="btn-close" onClick={handleBack} aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                        {error && <div className="alert alert-danger" role="alert">{error}</div>}
+                        <form onSubmit={updateHandler}>
+                            <div className="mb-3">
+                                <label htmlFor="title" className="form-label">Product Title</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    id="title"
+                                    placeholder="Enter product title"
+                                    value={title}
+                                    onChange={handleTitle}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="price" className="form-label">Product Price</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    id="price"
+                                    placeholder="Enter product price"
+                                    value={price}
+                                    onChange={handlePrice}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-3">
+                                <label htmlFor="product_description" className="form-label">Product Description</label>
+                                <textarea
+                                    className="form-control"
+                                    id="product_description"
+                                    rows="3"
+                                    placeholder="Enter product description"
+                                    value={product_description}
+                                    onChange={handleProductDescription}
+                                    required
+                                ></textarea>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={handleBack}>Back</button>
+                                <button type="submit" className="btn btn-primary" disabled={loading}>
+                                    {loading ? <span className="spinner-border spinner-border-sm"></span> : 'Update'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    )
+    );
 }
